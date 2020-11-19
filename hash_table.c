@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <unistd.h>
 
 void ht_init(ht_t *ht, ht_config_t c)
 {
