@@ -1,5 +1,6 @@
 #include "quickfuzz.h"
 
+#include "hash_set.h"
 #include "hash_table.h"
 
 #include <string.h>
@@ -17,6 +18,8 @@ static pthread_mutex_t qfi_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 // Check for internal error or usage error
 #define qfi_chk(cond) assert(cond)
+
+static hs_t hs;
 
 // -----------------------------------------------------------------------------
 // Two-way map (between symbolic thread names and thread IDs)
@@ -132,34 +135,6 @@ static int get_elems()
 static int get_capacity()
 {
   return HT_SZ;
-}
-
-// -----------------------------------------------------------------------------
-// Hash set (for storing signalled symbolic names)
-
-static ht_t hs;
-
-static void hs_init(ht_config_t c)
-{
-  ht_init(&hs, c);
-}
-
-static int hs_insert(void *el)
-{
-  int ret;
-  ret = ht_insert(&hs, el, NULL);
-  assert(ret == 0 || ret == -1 || ret == -2);
-  return ret;
-}
-
-// Check if element is in set
-static int hs_test(void *el)
-{
-  ht_entry_t *e;
-  int ret;
-  ret = ht_find(&hs, el, &e);
-  assert(ret == 0 || ret == -1);
-  return ret + 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -286,7 +261,7 @@ void qfi_init(int t)
   c.hash_el = hash_str;
   c.equal_el = equal_str;
 
-  hs_init(c);
+  hs_init(&hs, c);
 }
 
 void qfi_print(char *str)
@@ -303,7 +278,7 @@ void qfi_wait(char *sym)
   int i;
   for (i = 0; i * qfi_yield < qfi_wait_time; i++) {
     qfi_lock();
-    c = hs_test(sym);
+    c = hs_test(&hs, sym);
     qfi_unlock();
     if (c) {
       break;
@@ -316,8 +291,7 @@ void qfi_signal(char *sym)
 {
   int ret;
   qfi_lock();
-  ret = hs_insert(sym);
+  ret = hs_insert(&hs, sym);
   assert(ret == 0 || ret == -1 || ret == -2);
   qfi_unlock();
 }
-
