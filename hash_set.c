@@ -1,5 +1,6 @@
 #include "hash_set.h"
 
+#include <assert.h>
 #include <stdlib.h>
 
 void hs_init(hs_t *hs, ht_config_t c)
