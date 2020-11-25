@@ -1,16 +1,20 @@
+.PHONY: clean all
 
+WARN = -Wall -pedantic
 NOWARN = -Wno-unused-variable -Wno-unused-function
-CFLAGS = -Wall -pedantic
 
-all:
-	$(CC) $(CFLAGS) $(NOWARN) -c hash_table.c
-	$(CC) $(CFLAGS) $(NOWARN) -c hash_set.c
-	$(CC) $(CFLAGS) $(NOWARN) -c quickfuzz.c
-	$(CC) $(CFLAGS) $(NOWARN) -DQUICKFUZZ -o test test.c quickfuzz.o hash_table.o hash_set.o -pthread
+CFLAGS = $(WARN) $(NOWARN)
 
-run:
-	./test
+OBJS = \
+  hash_table.o \
+	hash_set.o \
+	quickfuzz.o
+
+all: $(OBJS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f test *.o
-
+	rm -f *.o
+	make -C tests clean
