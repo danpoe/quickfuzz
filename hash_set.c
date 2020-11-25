@@ -3,6 +3,16 @@
 #include <assert.h>
 #include <stdlib.h>
 
+hs_t *hs_allocate(size_t capacity)
+{
+  return ht_allocate(capacity);
+}
+
+void hs_destroy(hs_t *hs)
+{
+  ht_destroy(hs);
+}
+
 void hs_init(hs_t *hs, ht_config_t c)
 {
   ht_init(hs, c);
