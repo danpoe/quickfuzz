@@ -5,7 +5,7 @@
 #include <string.h>
 
 // DJB2 variant
-unsigned long hash_str(void *v)
+unsigned long hash_str(const void *v)
 {
   char *str = (char *)v;
   assert(str != NULL);
@@ -21,10 +21,10 @@ unsigned long hash_str(void *v)
   return hash;
 }
 
-int equal_str(void *v1, void *v2)
+int equal_str(const void *v1, const void *v2)
 {
-  char *s1 = (char *)v1;
-  char *s2 = (char *)v2;
+  const char *s1 = (const char *)v1;
+  const char *s2 = (const char *)v2;
 
   return strcmp(s1, s2) == 0;
 }
@@ -65,7 +65,7 @@ size_t ht_get_size(ht_t *ht)
   return ht->size;
 }
 
-int ht_insert(ht_t *ht, void *key, void *val)
+int ht_insert(ht_t *ht, const void *key, void *val)
 {
   if (ht->size >= ht->capacity) {
     return -2; // No space (and key possibly exists)
@@ -93,7 +93,7 @@ int ht_insert(ht_t *ht, void *key, void *val)
   }
 }
 
-int ht_find(ht_t *ht, void *key, ht_entry_t **hte)
+int ht_find(ht_t *ht, const void *key, ht_entry_t **hte)
 {
   int pos = ht->hash_el(key) % ht->capacity;
   assert(pos >= 0);
@@ -119,7 +119,7 @@ int ht_find(ht_t *ht, void *key, ht_entry_t **hte)
   return -1;
 }
 
-int ht_delete(ht_t *ht, void *key)
+int ht_delete(ht_t *ht, const void *key)
 {
   ht_entry_t *e;
   int ret;
