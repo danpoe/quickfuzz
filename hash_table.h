@@ -1,6 +1,9 @@
 #ifndef __HASH_TABLE_H__
 #define __HASH_TABLE_H__
 
+unsigned long hash_str(void *v);  
+int equal_str(void *v1, void *v2);
+
 typedef struct ht_entry {
   // key/val
   void *key;

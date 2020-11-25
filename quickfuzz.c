@@ -150,31 +150,6 @@ int equal_tid(void *v1, void *v2)
   return v1 == v2;
 }
 
-// DJB2 variant
-unsigned long hash_str(void *v)
-{
-  char *str = (char *)v;
-  assert(str != NULL);
-
-  long hash = 5381;
-  char c;
-
-  while ((c = *str)) {
-    hash = ((hash << 5) + hash) + c;
-    str++;
-  }
-
-  return hash;  
-}
-
-int equal_str(void *v1, void *v2)
-{
-  char *s1 = (char *)v1;
-  char *s2 = (char *)v2;
-
-  return strcmp(s1, s2) == 0;
-}
-
 // -----------------------------------------------------------------------------
 // Symbolic thread IDs
 
