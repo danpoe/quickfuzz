@@ -38,7 +38,7 @@ static void init(ht_config_t c1, ht_config_t c2)
 
 static int map(void *el1, void *el2)
 {
-  if (elems >= HT_SZ) {
+  if (elems >= ht_get_size(&ht1)) {
     return -2; // No space (and a component may exist already)
   }
 
@@ -134,18 +134,18 @@ static int get_elems()
 
 static int get_capacity()
 {
-  return HT_SZ;
+  return ht_get_size(&ht1);
 }
 
 // -----------------------------------------------------------------------------
 // Hash and equality functions
 
-unsigned long hash_tid(void *v)
+unsigned long hash_tid(const void *v)
 {
   return (long)v;
 }
 
-int equal_tid(void *v1, void *v2)
+int equal_tid(const void *v1, const void *v2)
 {
   return v1 == v2;
 }

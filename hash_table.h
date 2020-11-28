@@ -1,6 +1,8 @@
 #ifndef __HASH_TABLE_H__
 #define __HASH_TABLE_H__
 
+#include <stddef.h>
+
 unsigned long hash_str(const void *v);
 int equal_str(const void *v1, const void *v2);
 

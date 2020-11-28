@@ -36,7 +36,7 @@ ht_t *ht_allocate(size_t capacity)
   p->size = 0;
   p->equal_el = NULL;
   p->hash_el = NULL;
-  p->ht = (ht_t *)malloc(capacity * sizeof(ht_entry_t));
+  p->ht = (ht_entry_t *)malloc(capacity * sizeof(ht_entry_t));
   return p;
 }
 

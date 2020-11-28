@@ -1,6 +1,6 @@
 .PHONY: clean all
 
-WARN = -Wall -pedantic
+WARN = -Wall -pedantic -Werror
 NOWARN = -Wno-unused-variable -Wno-unused-function
 
 CFLAGS = $(WARN) $(NOWARN)
