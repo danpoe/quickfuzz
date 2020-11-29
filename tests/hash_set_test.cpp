@@ -7,5 +7,5 @@ extern "C"
 
 TEST_CASE("Hash set")
 {
-  hs_init(0, ht_config_t());
+
 }
