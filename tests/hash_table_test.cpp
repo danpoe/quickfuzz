@@ -5,6 +5,9 @@ extern "C"
 #include "../hash_table.h"
 }
 
+namespace
+{
+
 int equal_int(const void *el1, const void *el2)
 {
   return *((int *)el1) == *((int *)el2);
@@ -14,6 +17,7 @@ unsigned long hash_int(const void *el)
 {
   return *((int *)el);
 }
+} // anonymous namespace
 
 TEST_CASE("Hash table")
 {
