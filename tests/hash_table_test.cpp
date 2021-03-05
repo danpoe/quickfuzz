@@ -17,6 +17,11 @@ unsigned long hash_int(const void *el)
 {
   return *((int *)el);
 }
+
+unsigned long hash_int_lsb(const void *el)
+{
+  return *((int *)el) & 1;
+}
 } // anonymous namespace
 
 TEST_CASE("Hash table")
@@ -94,5 +99,36 @@ TEST_CASE("Hash table")
       ht_clear(ht);
       REQUIRE(ht_get_size(ht) == 0);
     }
+  }
+
+  SECTION("collisions")
+  {
+    ht_config_t config;
+    config.equal_el = equal_int;
+    config.hash_el = hash_int_lsb;
+
+    ht_t *ht = ht_allocate(10);
+    ht_init(ht, config);
+
+    // both keys have the same lsb, hence there will be a hash collision
+    int key1 = 0;
+    int key2 = 2;
+
+    REQUIRE(config.hash_el(&key1) == config.hash_el(&key2));
+
+    ht_insert(ht, &key1, &value1);
+    ht_insert(ht, &key2, &value1);
+
+    REQUIRE(ht_get_size(ht) == 2);
+
+    r = ht_find(ht, &key1, &entry);
+    REQUIRE(r == 0);
+    REQUIRE(entry->key == &key1);
+    REQUIRE(entry->val == &value1);
+
+    r = ht_find(ht, &key2, &entry);
+    REQUIRE(r == 0);
+    REQUIRE(entry->key == &key2);
+    REQUIRE(entry->val == &value1);
   }
 }
